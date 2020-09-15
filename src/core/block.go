@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/gob"
+	"fmt"
 	"log"
 	"strconv"
 	"time"
@@ -37,7 +38,7 @@ func (b *Block) SetHash(){
 }
 
 
-func (b *Block)Serializee()[]byte{
+func (b *Block)Serialize()[]byte{
 	var result bytes.Buffer
 	encoder := gob.NewEncoder(&result)
 
@@ -47,6 +48,19 @@ func (b *Block)Serializee()[]byte{
 	}
 
 	return result.Bytes()
+}
+
+func DeserializeBlock(d []byte) *Block {
+	var block Block
+
+	decoder := gob.NewDecoder(bytes.NewReader(d))
+	err := decoder.Decode(&block)
+
+	if err!=nil{
+		fmt.Println(err)
+	}
+
+	return &block
 }
 
 func NewGenesisBlock()*Block{
